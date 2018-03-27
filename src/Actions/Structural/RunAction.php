@@ -4,22 +4,23 @@
  * @file
  */
 
-namespace Phloem\Core\Actions;
+namespace Phloem\Actions\Structural;
 
-use Phloem\Core\Action\ActionInterface;
-use Phloem\Core\Exception\ConfigException;
-use Phloem\Core\Expression\Context;
+use Phloem\Action\ActionInterface;
+use Phloem\Actions\Structural\TaskAction;
+use Phloem\Exception\ConfigException;
+use Phloem\Expression\Context;
 use Psr\Container\ContainerInterface;
 
 /**
  * Class RunAction
  *
- * @package Phloem\Core\Actions
+ * @package Phloem\Actions
  */
 class RunAction implements ActionInterface
 {
     /**
-     * @var \Phloem\Core\Actions\TaskAction
+     * @var \Phloem\Actions\Structural\TaskAction
      */
     protected $task;
 
@@ -31,7 +32,7 @@ class RunAction implements ActionInterface
     /**
      * RunAction constructor.
      *
-     * @param \Phloem\Core\Actions\TaskAction $task
+     * @param \Phloem\Actions\Structural\TaskAction $task
      */
     public function __construct(TaskAction $task)
     {

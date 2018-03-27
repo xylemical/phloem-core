@@ -1,0 +1,8 @@
+- set:
+    task3: task3
+
+- task: dummy-task
+  actions:
+    set:
+      task4: task4
+

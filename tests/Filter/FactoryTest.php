@@ -3,11 +3,11 @@
  * @file
  */
 
-namespace Phloem\Core\Filter;
+namespace Phloem\Filter;
 
-use Phloem\Core\Expression\Context;
-use Phloem\Core\Filters\NullFilter;
-use Phloem\Core\Phloem;
+use Phloem\Expression\Context;
+use Phloem\Filters\NullFilter;
+use Phloem\Phloem;
 use PHPUnit\Framework\TestCase;
 use Pimple\Psr11\Container;
 use Xylemical\Expressions\Evaluator;
@@ -24,7 +24,7 @@ class FactoryTest extends TestCase
     protected $container;
 
     /**
-     * @var \Phloem\Core\Filter\Factory
+     * @var \Phloem\Filter\Factory
      */
     protected $factory;
 
@@ -37,7 +37,7 @@ class FactoryTest extends TestCase
         $container = new Container($this->container);
 
         $this->factory = new Factory($container);
-        $this->container[Phloem::ACTIONS] = new \Phloem\Core\Action\Factory($container);
+        $this->container[Phloem::ACTIONS] = new \Phloem\Action\Factory($container);
         $this->container[Phloem::FILTERS] = $this->factory;
         $this->container[Phloem::PARSER] = new Parser(new Lexer(new ExpressionFactory(new BcMath())));
         $this->container[Phloem::EVALUATOR] = new Evaluator();
@@ -46,10 +46,10 @@ class FactoryTest extends TestCase
     /**
      * Test when no filter is defined.
      *
-     * @throws \Phloem\Core\Exception\FilterFactoryException
+     * @throws \Phloem\Exception\FilterFactoryException
      */
     public function testNoFilterDefined() {
-        $this->expectException('\\Phloem\\Core\\Exception\\FilterFactoryException');
+        $this->expectException('\\Phloem\\Exception\\FilterFactoryException');
 
         $this->factory->getFilter('unknown');
     }
@@ -57,10 +57,10 @@ class FactoryTest extends TestCase
     /**
      * Test when somebody provides a bad filter factory method.
      *
-     * @throws \Phloem\Core\Exception\FilterFactoryException
+     * @throws \Phloem\Exception\FilterFactoryException
      */
     public function testBadFilterDefined() {
-        $this->expectException('\\Phloem\\Core\\Exception\\FilterFactoryException');
+        $this->expectException('\\Phloem\\Exception\\FilterFactoryException');
 
         $this->factory->setFilter('bad', true);
         $this->factory->getFilter('bad');
@@ -69,25 +69,25 @@ class FactoryTest extends TestCase
     /**
      * Test the lazy-loading of the filter.
      *
-     * @throws \Phloem\Core\Exception\FilterFactoryException
+     * @throws \Phloem\Exception\FilterFactoryException
      */
     public function testStringFilter() {
         // Test check works.
         $this->assertFalse($this->factory->hasFilter('string'));
 
-        $this->factory->setFilter('string', 'Phloem\\Core\\Filters\\NullFilter');
+        $this->factory->setFilter('string', 'Phloem\\Filters\\NullFilter');
 
         // Test check works.
         $this->assertTrue($this->factory->hasFilter('string'));
 
         $filter = $this->factory->getFilter('string');
-        $this->assertEquals(get_class($filter), 'Phloem\\Core\\Filters\\NullFilter');
+        $this->assertEquals(get_class($filter), 'Phloem\\Filters\\NullFilter');
     }
 
     /**
      * Test the closure generation of the filter.
      *
-     * @throws \Phloem\Core\Exception\FilterFactoryException
+     * @throws \Phloem\Exception\FilterFactoryException
      */
     public function testClosureFilter() {
         $this->factory->setFilter('closure', function($factory) {
@@ -95,13 +95,13 @@ class FactoryTest extends TestCase
         });
 
         $filter = $this->factory->getFilter('closure');
-        $this->assertEquals(get_class($filter), 'Phloem\\Core\\Filters\\NullFilter');
+        $this->assertEquals(get_class($filter), 'Phloem\\Filters\\NullFilter');
     }
 
     /**
      * Test using an filter for the factory clones the filter.
      *
-     * @throws \Phloem\Core\Exception\FilterFactoryException
+     * @throws \Phloem\Exception\FilterFactoryException
      */
     public function testCloneFilter() {
         $original = new NullFilter();
@@ -113,7 +113,7 @@ class FactoryTest extends TestCase
         // Change $filter to ensure they are two different objects.
         $filter->failure = true;
 
-        $this->assertEquals(get_class($filter), 'Phloem\\Core\\Filters\\NullFilter');
+        $this->assertEquals(get_class($filter), 'Phloem\\Filters\\NullFilter');
         $this->assertNotEquals($filter, $original);
     }
 
@@ -132,7 +132,7 @@ class FactoryTest extends TestCase
      */
     public function testEvaluateContainerException()
     {
-        $this->expectException('Phloem\\Core\\Exception\\FilterException');
+        $this->expectException('Phloem\\Exception\\FilterException');
         $context = new Context();
         unset($this->container[Phloem::PARSER]);
         $this->factory->filter('{{ 1 + 1 }}', $context);
@@ -143,7 +143,7 @@ class FactoryTest extends TestCase
      */
     public function testEvaluateException()
     {
-        $this->expectException('Phloem\\Core\\Exception\\FilterException');
+        $this->expectException('Phloem\\Exception\\FilterException');
         $context = new Context();
         $this->factory->filter('{{ 1 + 1 ( }}', $context);
     }

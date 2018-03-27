@@ -3,10 +3,10 @@
  * @file
  */
 
-namespace Phloem\Core\Actions;
+namespace Phloem\Actions\Structural;
 
-use Phloem\Core\Action\ActionTestCase;
-use Phloem\Core\Expression\Context;
+use Phloem\Action\ActionTestCase;
+use Phloem\Expression\Context;
 
 class TaskActionTest extends ActionTestCase
 {
@@ -24,7 +24,7 @@ class TaskActionTest extends ActionTestCase
      * Test when there is no condition.
      */
     public function testNoConfig() {
-        $this->expectException('Phloem\\Core\\Exception\\ConfigException');
+        $this->expectException('Phloem\\Exception\\ConfigException');
 
         $config = [];
 
@@ -35,7 +35,7 @@ class TaskActionTest extends ActionTestCase
      * Test when there is no condition.
      */
     public function testNoCondition() {
-        $this->expectException('Phloem\\Core\\Exception\\ConfigException');
+        $this->expectException('Phloem\\Exception\\ConfigException');
 
         $config = ['task' => ''];
 
@@ -46,7 +46,7 @@ class TaskActionTest extends ActionTestCase
      * Test when there is Bool condition.
      */
     public function testBoolCondition() {
-        $this->expectException('Phloem\\Core\\Exception\\ConfigException');
+        $this->expectException('Phloem\\Exception\\ConfigException');
 
         $config = ['task' => false];
 
@@ -57,7 +57,7 @@ class TaskActionTest extends ActionTestCase
      * Tests that a dependency that is not a string causes an exception.
      */
     public function testBadDependency() {
-        $this->expectException('Phloem\\Core\\Exception\\ConfigException');
+        $this->expectException('Phloem\\Exception\\ConfigException');
 
         $config = [
           'task' => 'dummy',
@@ -71,7 +71,7 @@ class TaskActionTest extends ActionTestCase
      * Test that duplication of the task causes an exception.
      */
     public function testDuplication() {
-        $this->expectException('Phloem\\Core\\Exception\\ConfigException');
+        $this->expectException('Phloem\\Exception\\ConfigException');
 
         $config = [
           'task' => 'dummy'

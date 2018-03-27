@@ -4,15 +4,15 @@
  * @file
  */
 
-namespace Phloem\Core\Action;
+namespace Phloem\Action;
 
-use Phloem\Core\Expression\Context;
+use Phloem\Expression\Context;
 use Psr\Container\ContainerInterface;
 
 /**
  * Class ActionInterface
  *
- * @package Phloem\Core\Build
+ * @package Phloem
  */
 interface ActionInterface
 {
@@ -28,18 +28,18 @@ interface ActionInterface
      *
      * @return void
      *
-     * @throws \Phloem\Core\Exception\ConfigException
+     * @throws \Phloem\Exception\ConfigException
      */
     public function setup(ContainerInterface $container, array $config);
 
     /**
      * Executes the action.
      *
-     * @param \Phloem\Core\Expression\Context $context
+     * @param \Phloem\Expression\Context $context
      *
      * @return void
      *
-     * @throws \Phloem\Core\Exception\ExecutionException
+     * @throws \Phloem\Exception\ExecutionException
      */
     public function execute(Context $context);
 }

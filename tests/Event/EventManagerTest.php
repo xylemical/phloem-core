@@ -3,7 +3,7 @@
  * @file
  */
 
-namespace Phloem\Core\Event;
+namespace Phloem\Event;
 
 use PHPUnit\Framework\TestCase;
 

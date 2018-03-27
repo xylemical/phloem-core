@@ -4,24 +4,26 @@
  * @file
  */
 
-namespace Phloem\Core\Action;
+namespace Phloem\Action;
 
-use Phloem\Core\Phloem;
+use Phloem\Expression\Variable;
+use Phloem\Manager;
+use Phloem\Phloem;
 use PHPUnit\Framework\TestCase;
 use Pimple\Psr11\Container;
-use Xylemical\Expressions\Context;
 use Xylemical\Expressions\Evaluator;
 use Xylemical\Expressions\ExpressionFactory;
 use Xylemical\Expressions\Lexer;
 use Xylemical\Expressions\Math\BcMath;
 use Xylemical\Expressions\Parser;
-use Xylemical\Expressions\Token;
-use Xylemical\Expressions\Value;
+use Phloem\Action\Factory as ActionFactory;
+use Phloem\Filter\Factory as FilterFactory;
+use Phloem\Loader\Factory as LoaderFactory;
 
 /**
  * Class ActionTestCase
  *
- * @package Phloem\Core\Action
+ * @package Phloem\Action
  */
 abstract class ActionTestCase extends TestCase
 {
@@ -36,7 +38,7 @@ abstract class ActionTestCase extends TestCase
     protected $container;
 
     /**
-     * @var \Phloem\Core\Action\AbstractAction
+     * @var \Phloem\Action\AbstractAction
      */
     protected $action;
 
@@ -46,20 +48,15 @@ abstract class ActionTestCase extends TestCase
     public function setUp() {
         $this->pimple = new \Pimple\Container();
         $this->container = new Container($this->pimple);
-        $this->pimple[Phloem::ACTIONS] = new Factory($this->container);
+        $this->pimple[Phloem::ACTIONS] = new ActionFactory($this->container);
         $this->pimple[Phloem::EXPRESSIONS] = new ExpressionFactory(new BcMath());
         $this->pimple[Phloem::PARSER] = new Parser(new Lexer($this->pimple[Phloem::EXPRESSIONS]));
+        $this->pimple[Phloem::MANAGER] = new Manager();
         $this->pimple[Phloem::EVALUATOR] = new Evaluator();
-        $this->pimple[Phloem::FILTERS] = new \Phloem\Core\Filter\Factory($this->container);
+        $this->pimple[Phloem::FILTERS] = new FilterFactory($this->container);
+        $this->pimple[Phloem::LOADER] = new LoaderFactory();
 
         // Provide variable behaviour with the filtering.
-        $this->pimple[Phloem::EXPRESSIONS]->addOperator(
-            new Value('\$[a-zA-Z_][a-zA-Z0-9_]*',
-                function(array $operands, Context $context, Token $token) {
-                    // Specialized behaviour of variables.
-                    return $context->getVariable(substr($token->getValue(), 1));
-                }
-            )
-        );
+        $this->pimple[Phloem::EXPRESSIONS]->addOperator(new Variable());
     }
 }

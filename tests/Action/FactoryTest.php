@@ -3,11 +3,12 @@
  * @file
  */
 
-namespace Phloem\Core\Action;
+namespace Phloem\Action;
 
-use Phloem\Core\Actions\NullAction;
-use Phloem\Core\Expression\Context;
-use Phloem\Core\Phloem;
+use Phloem\Actions\NullAction;
+use Phloem\Expression\Context;
+use Phloem\Manager;
+use Phloem\Phloem;
 use PHPUnit\Framework\TestCase;
 use Pimple\Psr11\Container;
 use Xylemical\Expressions\Evaluator;
@@ -25,7 +26,7 @@ class FactoryTest extends TestCase
     protected $container;
 
     /**
-     * @var \Phloem\Core\Action\Factory
+     * @var \Phloem\Action\Factory
      */
     protected $factory;
 
@@ -38,16 +39,17 @@ class FactoryTest extends TestCase
         $this->factory = new Factory(new Container($this->container));
         $this->container[Phloem::ACTIONS] = $this->factory;
         $this->container[Phloem::PARSER] = new Parser(new Lexer(new ExpressionFactory(new BcMath())));
+        $this->container[Phloem::MANAGER] = new Manager();
         $this->container[Phloem::EVALUATOR] = new Evaluator();
     }
 
     /**
      * Test when no action is defined.
      *
-     * @throws \Phloem\Core\Exception\ActionFactoryException
+     * @throws \Phloem\Exception\ActionFactoryException
      */
     public function testNoActionDefined() {
-        $this->expectException('\\Phloem\\Core\\Exception\\ActionFactoryException');
+        $this->expectException('\\Phloem\\Exception\\ActionFactoryException');
 
         $this->factory->getAction('unknown');
     }
@@ -55,10 +57,10 @@ class FactoryTest extends TestCase
     /**
      * Test when somebody provides a bad action factory method.
      *
-     * @throws \Phloem\Core\Exception\ActionFactoryException
+     * @throws \Phloem\Exception\ActionFactoryException
      */
     public function testBadActionDefined() {
-        $this->expectException('\\Phloem\\Core\\Exception\\ActionFactoryException');
+        $this->expectException('\\Phloem\\Exception\\ActionFactoryException');
 
         $this->factory->setAction('bad', true);
         $this->factory->getAction('bad');
@@ -67,25 +69,25 @@ class FactoryTest extends TestCase
     /**
      * Test the lazy-loading of the action.
      *
-     * @throws \Phloem\Core\Exception\ActionFactoryException
+     * @throws \Phloem\Exception\ActionFactoryException
      */
     public function testStringAction() {
         // Test check works.
         $this->assertFalse($this->factory->hasAction('string'));
 
-        $this->factory->setAction('string', 'Phloem\\Core\\Actions\\NullAction');
+        $this->factory->setAction('string', 'Phloem\\Actions\\NullAction');
 
         // Test check works.
         $this->assertTrue($this->factory->hasAction('string'));
 
         $action = $this->factory->getAction('string');
-        $this->assertEquals(get_class($action), 'Phloem\\Core\\Actions\\NullAction');
+        $this->assertEquals(get_class($action), 'Phloem\\Actions\\NullAction');
     }
 
     /**
      * Test the closure generation of the action.
      *
-     * @throws \Phloem\Core\Exception\ActionFactoryException
+     * @throws \Phloem\Exception\ActionFactoryException
      */
     public function testClosureAction() {
         $this->factory->setAction('closure', function($factory) {
@@ -93,13 +95,13 @@ class FactoryTest extends TestCase
         });
 
         $action = $this->factory->getAction('closure');
-        $this->assertEquals(get_class($action), 'Phloem\\Core\\Actions\\NullAction');
+        $this->assertEquals(get_class($action), 'Phloem\\Actions\\NullAction');
     }
 
     /**
      * Test using an action for the factory clones the action.
      *
-     * @throws \Phloem\Core\Exception\ActionFactoryException
+     * @throws \Phloem\Exception\ActionFactoryException
      */
     public function testCloneAction() {
         $original = new NullAction();
@@ -111,7 +113,7 @@ class FactoryTest extends TestCase
         // Change $action to ensure they are two different objects.
         $action->failure = true;
 
-        $this->assertEquals(get_class($action), 'Phloem\\Core\\Actions\\NullAction');
+        $this->assertEquals(get_class($action), 'Phloem\\Actions\\NullAction');
         $this->assertNotEquals($action, $original);
     }
 
@@ -121,7 +123,7 @@ class FactoryTest extends TestCase
     public function testProcessString()
     {
         $action = $this->factory->process('null');
-        $this->assertEquals(get_class($action), 'Phloem\\Core\\Actions\\NullAction');
+        $this->assertEquals(get_class($action), 'Phloem\\Actions\\NullAction');
     }
 
     /**
@@ -129,7 +131,7 @@ class FactoryTest extends TestCase
      */
     public function testProcessConfigFailure()
     {
-        $this->expectException('Phloem\\Core\\Exception\\ActionFactoryException');
+        $this->expectException('Phloem\\Exception\\ActionFactoryException');
 
         $this->factory->process(true);
     }
@@ -137,13 +139,13 @@ class FactoryTest extends TestCase
     /**
      * Tests creating a null action from passing an empty array.
      *
-     * @throws \Phloem\Core\Exception\ActionFactoryException
-     * @throws \Phloem\Core\Exception\ConfigException
+     * @throws \Phloem\Exception\ActionFactoryException
+     * @throws \Phloem\Exception\ConfigException
      */
     public function testProcessNull()
     {
         $action = $this->factory->process([]);
-        $this->assertEquals(get_class($action), 'Phloem\\Core\\Actions\\NullAction');
+        $this->assertEquals(get_class($action), 'Phloem\\Actions\\NullAction');
     }
 
     /**
@@ -152,18 +154,18 @@ class FactoryTest extends TestCase
     public function testProcessSeries()
     {
         $action = $this->factory->process(['null', 'null']);
-        $this->assertEquals(get_class($action), 'Phloem\\Core\\Actions\\SeriesAction');
+        $this->assertEquals(get_class($action), 'Phloem\\Actions\\Structural\\SeriesAction');
     }
 
     /**
      * Tests an undefined action generates an exception.
      *
-     * @throws \Phloem\Core\Exception\ActionFactoryException
-     * @throws \Phloem\Core\Exception\ConfigException
+     * @throws \Phloem\Exception\ActionFactoryException
+     * @throws \Phloem\Exception\ConfigException
      */
     public function testProcessInvalidAction()
     {
-        $this->expectException('Phloem\\Core\\Exception\\ActionFactoryException');
+        $this->expectException('Phloem\\Exception\\ActionFactoryException');
 
         $this->factory->process([
           'unknown' => true,
@@ -173,21 +175,21 @@ class FactoryTest extends TestCase
     /**
      * Test the create of a valid action.
      *
-     * @throws \Phloem\Core\Exception\ActionFactoryException
-     * @throws \Phloem\Core\Exception\ConfigException
+     * @throws \Phloem\Exception\ActionFactoryException
+     * @throws \Phloem\Exception\ConfigException
      */
     public function testProcessAction()
     {
         $action = $this->factory->process([
           'series' => [],
         ]);
-        $this->assertEquals(get_class($action), 'Phloem\\Core\\Actions\\SeriesAction');
+        $this->assertEquals(get_class($action), 'Phloem\\Actions\\Structural\\SeriesAction');
     }
 
     /**
      * Test the evaluation routine processes correctly.
      *
-     * @throws \Phloem\Core\Exception\ExecutionException
+     * @throws \Phloem\Exception\ExecutionException
      */
     public function testEvaluateSuccess()
     {
@@ -200,11 +202,11 @@ class FactoryTest extends TestCase
     /**
      * Test that an invalid or container issue generates the proper exception.
      *
-     * @throws \Phloem\Core\Exception\ExecutionException
+     * @throws \Phloem\Exception\ExecutionException
      */
     public function testEvaluateContainerException()
     {
-        $this->expectException('Phloem\\Core\\Exception\\ExecutionException');
+        $this->expectException('Phloem\\Exception\\ExecutionException');
         $action = new NullAction();
         $context = new Context();
         unset($this->container[Phloem::PARSER]);
@@ -216,7 +218,7 @@ class FactoryTest extends TestCase
      */
     public function testEvaluateException()
     {
-        $this->expectException('Phloem\\Core\\Exception\\ExecutionException');
+        $this->expectException('Phloem\\Exception\\ExecutionException');
         $action = new NullAction();
         $context = new Context();
         $this->factory->evaluate($action, '1 + 1 (', $context);

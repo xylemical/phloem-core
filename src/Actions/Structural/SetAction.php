@@ -4,18 +4,18 @@
  * @file
  */
 
-namespace Phloem\Core\Actions;
+namespace Phloem\Actions\Structural;
 
-use Phloem\Core\Action\AbstractAction;
-use Phloem\Core\Action\ActionFilterTrait;
-use Phloem\Core\Exception\ConfigException;
-use Phloem\Core\Expression\Context;
+use Phloem\Action\AbstractAction;
+use Phloem\Action\ActionFilterTrait;
+use Phloem\Exception\ConfigException;
+use Phloem\Expression\Context;
 use Psr\Container\ContainerInterface;
 
 /**
  * Class SetAction
  *
- * @package Phloem\Core\Actions
+ * @package Phloem\Actions
  */
 class SetAction extends AbstractAction
 {

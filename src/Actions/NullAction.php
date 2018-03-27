@@ -4,16 +4,16 @@
  * @file
  */
 
-namespace Phloem\Core\Actions;
+namespace Phloem\Actions;
 
-use Phloem\Core\Action\ActionInterface;
-use Phloem\Core\Expression\Context;
+use Phloem\Action\ActionInterface;
+use Phloem\Expression\Context;
 use Psr\Container\ContainerInterface;
 
 /**
  * Class NullAction
  *
- * @package Phloem\Core\Actions
+ * @package Phloem\Actions
  */
 class NullAction implements ActionInterface
 {

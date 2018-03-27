@@ -3,16 +3,16 @@
  * @file
  */
 
-namespace Phloem\Core\Expression;
+namespace Phloem\Expression;
 
-use Phloem\Core\Actions\NullAction;
+use Phloem\Actions\NullAction;
 use PHPUnit\Framework\TestCase;
 
 class ContextTest extends TestCase
 {
 
     /**
-     * @var \Phloem\Core\Expression\Context
+     * @var \Phloem\Expression\Context
      */
     protected $context;
 

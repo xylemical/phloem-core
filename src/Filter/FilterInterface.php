@@ -4,15 +4,15 @@
  * @file
  */
 
-namespace Phloem\Core\Filter;
+namespace Phloem\Filter;
 
-use Phloem\Core\Expression\Context;
+use Phloem\Expression\Context;
 use Psr\Container\ContainerInterface;
 
 /**
  * Class FilterInterface
  *
- * @package Phloem\Core\Filter
+ * @package Phloem\Filter
  */
 interface FilterInterface
 {
@@ -31,7 +31,7 @@ interface FilterInterface
      * Applies the filter to the value.
      *
      * @param mixed $value
-     * @param \Phloem\Core\Expression\Context $context
+     * @param \Phloem\Expression\Context $context
      *
      * @return mixed
      */

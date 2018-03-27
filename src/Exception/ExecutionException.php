@@ -4,27 +4,27 @@
  * @file
  */
 
-namespace Phloem\Core\Exception;
+namespace Phloem\Exception;
 
-use Phloem\Core\Action\ActionInterface;
+use Phloem\Action\ActionInterface;
 
 /**
  * Class ExecutionException
  *
- * @package Phloem\Core\Build\Exception
+ * @package Phloem\Exception
  */
 class ExecutionException extends \Exception
 {
 
     /**
-     * @var \Phloem\Core\Action\ActionInterface
+     * @var \Phloem\Action\ActionInterface
      */
     private $action;
 
     /**
      * ExecutionException constructor.
      *
-     * @param \Phloem\Core\Action\ActionInterface $action
+     * @param \Phloem\Action\ActionInterface $action
      * @param string $message
      * @param int $code
      * @param \Throwable|null $previous
@@ -37,7 +37,7 @@ class ExecutionException extends \Exception
     /**
      * Get the action for the exception.
      *
-     * @return \Phloem\Core\Action\ActionInterface
+     * @return \Phloem\Action\ActionInterface
      */
     public function getAction() {
         return $this->action;

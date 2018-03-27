@@ -1,56 +1,41 @@
-# Phloem (Core)
+# Phloem
 
 This provides an extensible framework for executing programmatic style behaviour using configuration.
 
 ## Installation
 
 ```
-composer require xylemical/phloem-core
+composer require xylemical/phloem
 ```
 
 ## Usage
 
-The most basic usage of the core:
+The most basic usage of phloem:
 
 ```php
 <?php
 
-use Xylemical\Expressions\Math\BcMath;
-use Phloem\Core\Expression\ExpressionFactory;
-
 $actions = [
-    [
-        'if' => '$debug',
-        'then' => [
-           'set' => [
-               'message' => 'This is the $debug value.'
-           ]
-           'scope' => 'global'
-        ]
+    'if' => '$debug',
+    'then' => [
+       'set' => [
+           'message' => 'This is the $debug value.'
+       ]
+       'scope' => 'global'
     ]
 ];
 
-// Create the expression factory using the bcmath extension.
-$expressionFactory = new ExpressionFactory(new BcMath());
-
-// Update the context with environment variables.
-$context = $expressionFactory->getContext();
-$context->setEnvironment($_ENV);
+// Create the action execution.
+$phloem = new Phloem();
 
 // Set the global variable 'debug' to TRUE.
+$context = new Context();
 $context->setVariable('debug', TRUE);
 
-// Create the action factory, and set the default actions.
-$actionFactory = (new ActionFactory())->setDefaults();
-
-// Create a logger (requires installing monolog).
-$logger = new \Monolog\Monolog();
-
-// Create the action execution.
-$act = new Act($expressionFactory, $actionFactory, $logger);
-
 // Perform the actions.
-$act->evaluate($actions);
+$phloem->evaluate($actions);
+
+print $context->getVariable('message');
 ```
 
 ### Actions

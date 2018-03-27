@@ -4,17 +4,18 @@
  * @file
  */
 
-namespace Phloem\Core\Actions;
+namespace Phloem\Actions\Structural;
 
-use Phloem\Core\Action\AbstractAction;
-use Phloem\Core\Exception\ConfigException;
-use Phloem\Core\Expression\Context;
+use Phloem\Action\AbstractAction;
+use Phloem\Actions\Structural\RunAction;
+use Phloem\Exception\ConfigException;
+use Phloem\Expression\Context;
 use Psr\Container\ContainerInterface;
 
 /**
  * Class TaskAction
  *
- * @package Phloem\Core\Build
+ * @package Phloem
  */
 class TaskAction extends AbstractAction
 {
@@ -33,7 +34,7 @@ class TaskAction extends AbstractAction
     protected $dependencies;
 
     /**
-     * @var \Phloem\Core\Action\ActionInterface
+     * @var \Phloem\Action\ActionInterface
      */
     protected $action;
 

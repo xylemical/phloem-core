@@ -4,12 +4,12 @@
  * @file
  */
 
-namespace Phloem\Core\Exception;
+namespace Phloem\Exception;
 
 /**
  * Class ConfigException
  *
- * @package Phloem\Core\Build
+ * @package Phloem
  */
 class ConfigException extends \Exception
 {

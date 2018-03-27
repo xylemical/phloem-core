@@ -4,12 +4,12 @@
  * @file
  */
 
-namespace Phloem\Core\Exception;
+namespace Phloem\Exception;
 
 /**
  * Class FilterConfigException
  *
- * @package Phloem\Core\Exception
+ * @package Phloem\Exception
  */
 class FilterConfigException extends \Exception
 {

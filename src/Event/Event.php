@@ -4,12 +4,12 @@
  * @file
  */
 
-namespace Phloem\Core\Event;
+namespace Phloem\Event;
 
 /**
  * Class Event
  *
- * @package Phloem\Core\Event
+ * @package Phloem\Event
  */
 class Event
 {

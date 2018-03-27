@@ -4,21 +4,21 @@
  * @file
  */
 
-namespace Phloem\Core\Action;
+namespace Phloem\Action;
 
-use Phloem\Core\Actions\NullAction;
-use Phloem\Core\Actions\SeriesAction;
-use Phloem\Core\Exception\ActionFactoryException;
-use Phloem\Core\Exception\ExecutionException;
-use Phloem\Core\Expression\Context;
-use Phloem\Core\Phloem;
+use Phloem\Actions\NullAction;
+use Phloem\Actions\Structural\SeriesAction;
+use Phloem\Exception\ActionFactoryException;
+use Phloem\Exception\ExecutionException;
+use Phloem\Expression\Context;
+use Phloem\Phloem;
 use Psr\Container\ContainerInterface;
 use Psr\Container\ContainerExceptionInterface;
 
 /**
  * Class Factory
  *
- * @package Phloem\Core\Build
+ * @package Phloem
  */
 class Factory
 {
@@ -32,15 +32,17 @@ class Factory
      * @var array
      */
     protected $actions = [
-      'if' => 'Phloem\\Core\\Actions\\IfAction',
-      'loop' => 'Phloem\\Core\\Actions\\LoopAction',
-      'noop' => 'Phloem\\Core\\Actions\\NullAction',
-      'null' => 'Phloem\\Core\\Actions\\NullAction',
-      'series' => 'Phloem\\Core\\Actions\\SeriesAction',
-      'set' => 'Phloem\\Core\\Actions\\SetAction',
-      'task' => 'Phloem\\Core\\Actions\\TaskAction',
-      'unset' => 'Phloem\\Core\\Action\\UnsetAction',
-      'while' => 'Phloem\\Core\\Actions\\WhileAction',
+      'command' => 'Phloem\\Actions\\Command\\CommandAction',
+      'if' => 'Phloem\\Actions\\Structural\\IfAction',
+      'include' => 'Phloem\\Actions\\File\\IncludeAction',
+      'loop' => 'Phloem\\Actions\\Structural\\LoopAction',
+      'noop' => 'Phloem\\Actions\\NullAction',
+      'null' => 'Phloem\\Actions\\NullAction',
+      'series' => 'Phloem\\Actions\\Structural\\SeriesAction',
+      'set' => 'Phloem\\Actions\\Structural\\SetAction',
+      'task' => 'Phloem\\Actions\\Structural\\TaskAction',
+      'unset' => 'Phloem\\Action\\UnsetAction',
+      'while' => 'Phloem\\Actions\\Structural\\WhileAction',
     ];
 
     /**
@@ -66,9 +68,9 @@ class Factory
      *
      * @param string $name
      *
-     * @return \Phloem\Core\Action\ActionInterface
+     * @return \Phloem\Action\ActionInterface
      *
-     * @throws \Phloem\Core\Exception\ActionFactoryException
+     * @throws \Phloem\Exception\ActionFactoryException
      */
     public function getAction($name) {
         // Default to actions defined by this factory.
@@ -125,10 +127,10 @@ class Factory
      *
      * @param $config
      *
-     * @return \Phloem\Core\Action\ActionInterface
+     * @return \Phloem\Action\ActionInterface
      *
-     * @throws \Phloem\Core\Exception\ConfigException
-     * @throws \Phloem\Core\Exception\ActionFactoryException
+     * @throws \Phloem\Exception\ConfigException
+     * @throws \Phloem\Exception\ActionFactoryException
      */
     public function process($config) {
         $container = $this->getContainer();
@@ -172,13 +174,13 @@ class Factory
     /**
      * Evaluates an expression string.
      *
-     * @param \Phloem\Core\Action\ActionInterface $action
+     * @param \Phloem\Action\ActionInterface $action
      * @param string|\Xylemical\Expressions\Token[] $string
-     * @param \Phloem\Core\Expression\Context $context
+     * @param \Phloem\Expression\Context $context
      *
      * @return string
      *
-     * @throws \Phloem\Core\Exception\ExecutionException
+     * @throws \Phloem\Exception\ExecutionException
      */
     public function evaluate(ActionInterface $action, $string, Context $context)
     {

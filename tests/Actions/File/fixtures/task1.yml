@@ -1,0 +1,4 @@
+- set:
+    task1: task1
+- include:
+    - subpath/task2.yml

@@ -4,19 +4,19 @@
  * @file
  */
 
-namespace Phloem\Core\Filter;
+namespace Phloem\Filter;
 
-use Phloem\Core\Exception\FilterException;
-use Phloem\Core\Exception\FilterFactoryException;
-use Phloem\Core\Expression\Context;
-use Phloem\Core\Phloem;
+use Phloem\Exception\FilterException;
+use Phloem\Exception\FilterFactoryException;
+use Phloem\Expression\Context;
+use Phloem\Phloem;
 use Psr\Container\ContainerInterface;
 use Psr\Container\ContainerExceptionInterface;
 
 /**
  * Class Factory
  *
- * @package Phloem\Core\Filter
+ * @package Phloem\Filter
  */
 class Factory
 {
@@ -30,7 +30,7 @@ class Factory
      * @var array
      */
     protected $filters = [
-      'null' => 'Phloem\\Core\\Filters\\NullFilter',
+      'null' => 'Phloem\\Filters\\NullFilter',
     ];
 
     /**
@@ -57,9 +57,9 @@ class Factory
      *
      * @param string $name
      *
-     * @return \Phloem\Core\Filter\FilterInterface
+     * @return \Phloem\Filter\FilterInterface
      *
-     * @throws \Phloem\Core\Exception\FilterFactoryException
+     * @throws \Phloem\Exception\FilterFactoryException
      */
     public function getFilter($name) {
         // Default to filters defined by this factory.
@@ -90,7 +90,7 @@ class Factory
      * Set an filter by $name.
      *
      * @param string $name
-     * @param string|\Closure|\Phloem\Core\Filter\FilterInterface $filter
+     * @param string|\Closure|\Phloem\Filter\FilterInterface $filter
      *
      * @return static
      */
@@ -115,12 +115,12 @@ class Factory
      * Filters a string using pipes.
      *
      * @param string $string
-     * @param \Phloem\Core\Expression\Context $context
+     * @param \Phloem\Expression\Context $context
      *
      * @return string
      *
-     * @throws \Phloem\Core\Exception\FilterException
-     * @throws \Phloem\Core\Exception\FilterFactoryException
+     * @throws \Phloem\Exception\FilterException
+     * @throws \Phloem\Exception\FilterFactoryException
      */
     public function filter($string, Context $context) {
         preg_match_all('/\{\{(.*?)\}\}/s', $string, $matches, PREG_SET_ORDER);
@@ -150,12 +150,12 @@ class Factory
      * Processes the filtered string.
      *
      * @param string $string
-     * @param \Phloem\Core\Expression\Context $context
+     * @param \Phloem\Expression\Context $context
      *
      * @return string
      *
-     * @throws \Phloem\Core\Exception\FilterException
-     * @throws \Phloem\Core\Exception\FilterFactoryException
+     * @throws \Phloem\Exception\FilterException
+     * @throws \Phloem\Exception\FilterFactoryException
      */
     protected function process($string, Context $context)
     {
@@ -180,11 +180,11 @@ class Factory
      * Evaluates an expression string via the filter.
      *
      * @param string $string
-     * @param \Phloem\Core\Expression\Context $context
+     * @param \Phloem\Expression\Context $context
      *
      * @return string
      *
-     * @throws \Phloem\Core\Exception\FilterException
+     * @throws \Phloem\Exception\FilterException
      */
     protected function evaluate($string, Context $context)
     {
@@ -208,12 +208,12 @@ class Factory
      * Pipe the value through to the filter.
      *
      * @param $string
-     * @param \Phloem\Core\Expression\Context $context
+     * @param \Phloem\Expression\Context $context
      * @param mixed $value
      *
      * @return mixed
      *
-     * @throws \Phloem\Core\Exception\FilterFactoryException
+     * @throws \Phloem\Exception\FilterFactoryException
      */
     protected function pipe($string, Context $context, $value)
     {

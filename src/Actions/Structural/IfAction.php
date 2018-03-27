@@ -4,19 +4,19 @@
  * @file
  */
 
-namespace Phloem\Core\Actions;
+namespace Phloem\Actions\Structural;
 
-use Phloem\Core\Action\AbstractAction;
-use Phloem\Core\Action\ActionInterface;
-use Phloem\Core\Exception\ConfigException;
-use Phloem\Core\Expression\Context;
-use Phloem\Core\Phloem;
+use Phloem\Action\AbstractAction;
+use Phloem\Action\ActionInterface;
+use Phloem\Exception\ConfigException;
+use Phloem\Expression\Context;
+use Phloem\Phloem;
 use Psr\Container\ContainerInterface;
 
 /**
  * Class IfAction
  *
- * @package Phloem\Core\Actions
+ * @package Phloem\Actions
  */
 class IfAction extends AbstractAction
 {
@@ -27,12 +27,12 @@ class IfAction extends AbstractAction
     protected $condition;
 
     /**
-     * @var \Phloem\Core\Action\ActionInterface
+     * @var \Phloem\Action\ActionInterface
      */
     protected $then;
 
     /**
-     * @var \Phloem\Core\Action\ActionInterface
+     * @var \Phloem\Action\ActionInterface
      */
     protected $else;
 

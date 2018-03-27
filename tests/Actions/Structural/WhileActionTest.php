@@ -3,10 +3,10 @@
  * @file
  */
 
-namespace Phloem\Core\Actions;
+namespace Phloem\Actions\Structural;
 
-use Phloem\Core\Action\ActionTestCase;
-use Phloem\Core\Expression\Context;
+use Phloem\Action\ActionTestCase;
+use Phloem\Expression\Context;
 
 class WhileActionTest extends ActionTestCase
 {
@@ -25,7 +25,7 @@ class WhileActionTest extends ActionTestCase
      */
     public function testNoConfig()
     {
-        $this->expectException('Phloem\\Core\\Exception\\ConfigException');
+        $this->expectException('Phloem\\Exception\\ConfigException');
 
         $config = [];
 
@@ -37,7 +37,7 @@ class WhileActionTest extends ActionTestCase
      */
     public function testNoCondition()
     {
-        $this->expectException('Phloem\\Core\\Exception\\ConfigException');
+        $this->expectException('Phloem\\Exception\\ConfigException');
 
         $config = ['while' => ''];
 
@@ -49,7 +49,7 @@ class WhileActionTest extends ActionTestCase
      */
     public function testBoolCondition()
     {
-        $this->expectException('Phloem\\Core\\Exception\\ConfigException');
+        $this->expectException('Phloem\\Exception\\ConfigException');
 
         $config = ['while' => false];
 

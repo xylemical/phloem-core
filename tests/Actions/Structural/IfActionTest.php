@@ -3,10 +3,10 @@
  * @file
  */
 
-namespace Phloem\Core\Actions;
+namespace Phloem\Actions\Structural;
 
-use Phloem\Core\Action\ActionTestCase;
-use Phloem\Core\Expression\Context;
+use Phloem\Action\ActionTestCase;
+use Phloem\Expression\Context;
 
 class IfActionTest extends ActionTestCase
 {
@@ -24,7 +24,7 @@ class IfActionTest extends ActionTestCase
      * Test when there is no condition.
      */
     public function testNoConfig() {
-        $this->expectException('Phloem\\Core\\Exception\\ConfigException');
+        $this->expectException('Phloem\\Exception\\ConfigException');
 
         $config = [];
 
@@ -35,7 +35,7 @@ class IfActionTest extends ActionTestCase
      * Test when there is no condition.
      */
     public function testNoCondition() {
-        $this->expectException('Phloem\\Core\\Exception\\ConfigException');
+        $this->expectException('Phloem\\Exception\\ConfigException');
 
         $config = ['if' => ''];
 
@@ -46,7 +46,7 @@ class IfActionTest extends ActionTestCase
      * Test when there is Bool condition.
      */
     public function testBoolCondition() {
-        $this->expectException('Phloem\\Core\\Exception\\ConfigException');
+        $this->expectException('Phloem\\Exception\\ConfigException');
 
         $config = ['if' => false];
 

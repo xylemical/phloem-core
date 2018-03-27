@@ -4,16 +4,16 @@
  * @file
  */
 
-namespace Phloem\Core\Actions;
+namespace Phloem\Actions\Structural;
 
-use Phloem\Core\Action\AbstractAction;
-use Phloem\Core\Expression\Context;
+use Phloem\Action\AbstractAction;
+use Phloem\Expression\Context;
 use Psr\Container\ContainerInterface;
 
 /**
  * Class WhileAction
  *
- * @package Phloem\Core\Actions
+ * @package Phloem\Actions
  */
 class WhileAction extends AbstractAction
 {
@@ -23,7 +23,7 @@ class WhileAction extends AbstractAction
     protected $condition;
 
     /**
-     * @var \Phloem\Core\Action\ActionInterface
+     * @var \Phloem\Action\ActionInterface
      */
     protected $action;
 

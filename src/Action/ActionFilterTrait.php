@@ -4,22 +4,22 @@
  * @file
  */
 
-namespace Phloem\Core\Action;
+namespace Phloem\Action;
 
-use Phloem\Core\Expression\Context;
-use Phloem\Core\Phloem;
+use Phloem\Expression\Context;
+use Phloem\Phloem;
 use Psr\Container\ContainerInterface;
 
 /**
  * Class ActionFilterTrait
  *
- * @package Phloem\Core\Action
+ * @package Phloem\Action
  */
 trait ActionFilterTrait
 {
 
     /**
-     * @var \Phloem\Core\Filter\Factory
+     * @var \Phloem\Filter\Factory
      */
     protected $filters;
 
@@ -39,12 +39,12 @@ trait ActionFilterTrait
      * Filter a value.
      *
      * @param string $string
-     * @param \Phloem\Core\Expression\Context $context
+     * @param \Phloem\Expression\Context $context
      *
      * @return string
      *
-     * @throws \Phloem\Core\Exception\FilterException
-     * @throws \Phloem\Core\Exception\FilterFactoryException
+     * @throws \Phloem\Exception\FilterException
+     * @throws \Phloem\Exception\FilterFactoryException
      */
     public function filter($string, Context $context) {
         return $this->filters->filter($string, $context);

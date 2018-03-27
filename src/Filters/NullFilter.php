@@ -4,16 +4,16 @@
  * @file
  */
 
-namespace Phloem\Core\Filters;
+namespace Phloem\Filters;
 
-use Phloem\Core\Expression\Context;
-use Phloem\Core\Filter\FilterInterface;
+use Phloem\Expression\Context;
+use Phloem\Filter\FilterInterface;
 use Psr\Container\ContainerInterface;
 
 /**
  * Class NullFilter
  *
- * @package Phloem\Core\Filters
+ * @package Phloem\Filters
  */
 class NullFilter implements FilterInterface
 {

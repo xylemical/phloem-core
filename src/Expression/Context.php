@@ -4,15 +4,17 @@
  * @file
  */
 
-namespace Phloem\Core\Expression;
+namespace Phloem\Expression;
 
-use Phloem\Core\Action\ActionInterface;
+use Phloem\Action\ActionInterface;
+use Phloem\Event\EventManager;
+use Psr\Container\ContainerInterface;
 use Xylemical\Expressions\Context as Ctx;
 
 /**
  * Class Context
  *
- * @package Phloem\Core\Expression
+ * @package Phloem\Expression
  */
 class Context extends Ctx
 {
@@ -20,7 +22,7 @@ class Context extends Ctx
     /**
      * The current stack for actions.
      *
-     * @var \Phloem\Core\Action\ActionInterface[]
+     * @var \Phloem\Action\ActionInterface[]
      */
     protected $actions = [];
 
@@ -37,9 +39,40 @@ class Context extends Ctx
     protected $current = 'global';
 
     /**
+     * @var \Phloem\Event\EventManager
+     */
+    protected $events;
+
+    /**
+     * Get the events manager.
+     *
+     * @return \Phloem\Event\EventManager
+     */
+    public function getEvents()
+    {
+        if (!$this->events) {
+            $this->events = new EventManager();
+        }
+        return $this->events;
+    }
+
+    /**
+     * Set the events manager.
+     *
+     * @param \Phloem\Event\EventManager $manager
+     *
+     * @return static
+     */
+    public function setEvents(EventManager $manager)
+    {
+        $this->events = $manager;
+        return $this;
+    }
+
+    /**
      * Push an action current.
      *
-     * @param \Phloem\Core\Action\ActionInterface $action
+     * @param \Phloem\Action\ActionInterface $action
      * @param string $target
      */
     public function push(ActionInterface $action, $target) {
@@ -51,15 +84,25 @@ class Context extends Ctx
 
         // Add action to the actions.
         $this->actions[] = $action;
+
+        // Trigger event on context change.
+        $this->getEvents()->trigger('context:push', [
+          'target' => $target,
+          'action' => $action
+        ]);
     }
 
     /**
      * Pop an action.
      *
-     * @return \Phloem\Core\Action\ActionInterface|NULL
+     * @return \Phloem\Action\ActionInterface|NULL
      */
     public function pop() {
         if (count($this->actions)) {
+            // Trigger event on context change.
+            $this->getEvents()->trigger('context:pop');
+
+            // Update the contexts.
             $this->current = array_pop($this->history);
             return array_pop($this->actions);
         }
@@ -69,7 +112,7 @@ class Context extends Ctx
     /**
      * Get the history of actions.
      *
-     * @return \Phloem\Core\Action\ActionInterface[]
+     * @return \Phloem\Action\ActionInterface[]
      */
     public function getActions()
     {

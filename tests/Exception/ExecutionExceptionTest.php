@@ -3,9 +3,9 @@
  * @file
  */
 
-namespace Phloem\Core\Exception;
+namespace Phloem\Exception;
 
-use Phloem\Core\Actions\NullAction;
+use Phloem\Actions\NullAction;
 use PHPUnit\Framework\TestCase;
 
 class ExecutionExceptionTest extends TestCase

@@ -4,17 +4,17 @@
  * @file
  */
 
-namespace Phloem\Core\Actions;
+namespace Phloem\Actions\Structural;
 
-use Phloem\Core\Action\AbstractAction;
-use Phloem\Core\Exception\ConfigException;
-use Phloem\Core\Expression\Context;
+use Phloem\Action\AbstractAction;
+use Phloem\Exception\ConfigException;
+use Phloem\Expression\Context;
 use Psr\Container\ContainerInterface;
 
 /**
  * Class LoopAction
  *
- * @package Phloem\Core\Actions
+ * @package Phloem\Actions
  */
 class LoopAction extends AbstractAction
 {
@@ -25,7 +25,7 @@ class LoopAction extends AbstractAction
     protected $condition;
 
     /**
-     * @var \Phloem\Core\Action\ActionInterface
+     * @var \Phloem\Action\ActionInterface
      */
     protected $action;
 

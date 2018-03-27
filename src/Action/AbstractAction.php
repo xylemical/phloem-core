@@ -4,23 +4,28 @@
  * @file
  */
 
-namespace Phloem\Core\Action;
+namespace Phloem\Action;
 
-use Phloem\Core\Exception\ConfigException;
-use Phloem\Core\Expression\Context;
-use Phloem\Core\Phloem;
+use Phloem\Exception\ConfigException;
+use Phloem\Expression\Context;
+use Phloem\Phloem;
 use Psr\Container\ContainerInterface;
 
 /**
  * Class AbstractAction
  *
- * @package Phloem\Core\Action
+ * @package Phloem\Action
  */
 abstract class AbstractAction implements ActionInterface
 {
 
     /**
-     * @var \Phloem\Core\Action\Factory
+     * @var \Phloem\Manager
+     */
+    private $manager;
+
+    /**
+     * @var \Phloem\Action\Factory
      */
     private $factory;
 
@@ -36,6 +41,7 @@ abstract class AbstractAction implements ActionInterface
     {
         $this->factory = $container->get(Phloem::ACTIONS);
         $this->parser = $container->get(Phloem::PARSER);
+        $this->manager = $container->get(Phloem::MANAGER);
     }
 
     /**
@@ -48,10 +54,10 @@ abstract class AbstractAction implements ActionInterface
      *
      * @param string|array $config
      *
-     * @return \Phloem\Core\Action\ActionInterface
+     * @return \Phloem\Action\ActionInterface
      *
-     * @throws \Phloem\Core\Exception\ActionFactoryException
-     * @throws \Phloem\Core\Exception\ConfigException
+     * @throws \Phloem\Exception\ActionFactoryException
+     * @throws \Phloem\Exception\ConfigException
      */
     protected function process($config)
     {
@@ -62,11 +68,11 @@ abstract class AbstractAction implements ActionInterface
      * Evaluates a condition.
      *
      * @param string|\Xylemical\Expressions\Token[] $string
-     * @param \Phloem\Core\Expression\Context $context
+     * @param \Phloem\Expression\Context $context
      *
      * @return string
      *
-     * @throws \Phloem\Core\Exception\ExecutionException
+     * @throws \Phloem\Exception\ExecutionException
      */
     protected function evaluate($string, Context $context)
     {
@@ -76,11 +82,11 @@ abstract class AbstractAction implements ActionInterface
     /**
      * Performs an action.
      *
-     * @param \Phloem\Core\Action\ActionInterface $action
-     * @param \Phloem\Core\Expression\Context $context
+     * @param \Phloem\Action\ActionInterface $action
+     * @param \Phloem\Expression\Context $context
      * @param string $target
      *
-     * @throws \Phloem\Core\Exception\ExecutionException
+     * @throws \Phloem\Exception\ExecutionException
      */
     protected function perform(ActionInterface $action, Context $context, $target)
     {
@@ -93,11 +99,21 @@ abstract class AbstractAction implements ActionInterface
     /**
      * Get the action factory.
      *
-     * @return \Phloem\Core\Action\Factory
+     * @return \Phloem\Action\Factory
      */
     protected function getFactory()
     {
         return $this->factory;
+    }
+
+    /**
+     * Get the manager.
+     *
+     * @return \Phloem\Manager
+     */
+    protected function getManager()
+    {
+        return $this->manager;
     }
 
     /**
@@ -133,7 +149,7 @@ abstract class AbstractAction implements ActionInterface
      *
      * @return mixed
      *
-     * @throws \Phloem\Core\Exception\ConfigException
+     * @throws \Phloem\Exception\ConfigException
      */
     protected function required(array $config, $key, $type = null, $message = null) {
         if (!isset($config[$key])) {
@@ -165,7 +181,7 @@ abstract class AbstractAction implements ActionInterface
      *
      * @return mixed|null
      *
-     * @throws \Phloem\Core\Exception\ConfigException
+     * @throws \Phloem\Exception\ConfigException
      */
     protected function optional(array $config, $key, $default = null, $type = null)
     {
@@ -189,7 +205,7 @@ abstract class AbstractAction implements ActionInterface
      *
      * @return \Xylemical\Expressions\Token[]
      *
-     * @throws \Phloem\Core\Exception\ConfigException
+     * @throws \Phloem\Exception\ConfigException
      */
     protected function condition($string)
     {

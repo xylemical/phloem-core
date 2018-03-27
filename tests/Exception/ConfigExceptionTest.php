@@ -3,7 +3,7 @@
  * @file
  */
 
-namespace Phloem\Core\Exception;
+namespace Phloem\Exception;
 
 use PHPUnit\Framework\TestCase;
 
