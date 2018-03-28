@@ -25,6 +25,11 @@ class Manager
     protected $history = [];
 
     /**
+     * @var string[]
+     */
+    protected $tasks = [];
+
+    /**
      * Get the current path.
      *
      * @return string
@@ -69,4 +74,24 @@ class Manager
         return $this;
     }
 
+    /**
+     * Add a registered task.
+     *
+     * @param string $task
+     *
+     * @return static
+     */
+    public function addTask($task) {
+        $this->tasks[] = $task;
+        return $this;
+    }
+
+    /**
+     * Get the tasks defined.
+     *
+     * @return string[]
+     */
+    public function getTasks() {
+        return $this->tasks;
+    }
 }

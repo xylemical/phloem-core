@@ -66,6 +66,9 @@ class TaskAction extends AbstractAction
             throw new ConfigException($config, "Redefining an existing action '{$this->name}''.");
         }
 
+        // Register a new task.
+        $this->getManager()->addTask($this->name);
+
         // Add action to the factory for use by other actions.
         $this->getFactory()->setAction($this->name, new RunAction($this));
     }
@@ -74,16 +77,6 @@ class TaskAction extends AbstractAction
      * {@inheritdoc}
      */
     public function execute(Context $context) {
-        // Ensure the dependencies are run.
-        foreach ($this->dependencies as $dependency) {
-            $action = $this->getFactory()->getAction($dependency);
-            $this->perform($action, $context, 'dependency (' . $dependency . ')');
-        }
-
-        // Execute the action.
-        if ($this->action) {
-            $this->perform($this->action, $context, $this->getName());
-        }
     }
 
     /**
@@ -94,5 +87,25 @@ class TaskAction extends AbstractAction
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Get the dependencies needing to be run for the task.
+     *
+     * @return string[]
+     */
+    public function getDependencies()
+    {
+        return $this->dependencies;
+    }
+
+    /**
+     * Get the action to be performed as part of the task.
+     *
+     * @return \Phloem\Action\ActionInterface
+     */
+    public function getAction()
+    {
+        return $this->action;
     }
 }

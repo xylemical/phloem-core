@@ -8,6 +8,7 @@ namespace Phloem\Action;
 
 use Phloem\Exception\ConfigException;
 use Phloem\Expression\Context;
+use Phloem\Log\NullLogger;
 use Phloem\Phloem;
 use Psr\Container\ContainerInterface;
 
@@ -35,6 +36,16 @@ abstract class AbstractAction implements ActionInterface
     private $parser;
 
     /**
+     * @var \Phloem\Filter\Factory
+     */
+    private $filter;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
      * {@inheritdoc}
      */
     public function setup(ContainerInterface $container, array $config)
@@ -42,6 +53,8 @@ abstract class AbstractAction implements ActionInterface
         $this->factory = $container->get(Phloem::ACTIONS);
         $this->parser = $container->get(Phloem::PARSER);
         $this->manager = $container->get(Phloem::MANAGER);
+        $this->logger = $container->get(Phloem::LOGGER);
+        $this->filter = $container->get(Phloem::FILTERS);
     }
 
     /**
@@ -215,5 +228,29 @@ abstract class AbstractAction implements ActionInterface
         catch (\Exception $e) {
             throw new ConfigException([], $e->getMessage(), $e->getCode(), $e);
         }
+    }
+
+    /**
+     * Get the logger.
+     *
+     * @return \Psr\Log\LoggerInterface
+     */
+    protected function getLogger() {
+        return $this->logger;
+    }
+
+    /**
+     * Run the string through a filter.
+     *
+     * @param string $string
+     * @param \Phloem\Expression\Context $context
+     *
+     * @return string
+     *
+     * @throws \Phloem\Exception\FilterException
+     * @throws \Phloem\Exception\FilterFactoryException
+     */
+    protected function filter($string, Context $context) {
+        return $this->filter->filter($string, $context);
     }
 }

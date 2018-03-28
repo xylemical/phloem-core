@@ -22,7 +22,7 @@ class Variable extends Value
      * {@inheritdoc}
      */
     public function __construct($priority = 10, $associativity = Operator::NONE_ASSOCIATIVE) {
-        parent::__construct('\$[a-zA-Z_][a-zA-Z0-9_]*', function(array $operands, Context $context, Token $token) {
+        parent::__construct('\$[a-zA-Z_][a-zA-Z0-9_\-]*', function(array $operands, Context $context, Token $token) {
             // Specialized behaviour of variables.
             return $context->getVariable(substr($token->getValue(), 1));
         }, $priority, $associativity);

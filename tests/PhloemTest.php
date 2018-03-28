@@ -24,7 +24,7 @@ class PhloemTest extends TestCase
         $actions = $phloem->load(__DIR__ . '/fixtures/task1.yml');
 
         $this->assertTrue(is_array($actions));
-        $this->assertEquals(count($actions), 1);
+        $this->assertEquals(count($actions), 2);
         $this->assertTrue(isset($actions[0]['set']));
 
         $context = new Context();

@@ -36,4 +36,4 @@ if (!defined('PHLOEM_COMPOSER_INSTALL')) {
 
 require PHLOEM_COMPOSER_INSTALL;
 
-PHPUnit\TextUI\Command::main();
+Phloem\TextUI\Command::main();

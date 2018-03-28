@@ -7,6 +7,7 @@ namespace Phloem\Action;
 
 use Phloem\Actions\NullAction;
 use Phloem\Expression\Context;
+use Phloem\Log\NullLogger;
 use Phloem\Manager;
 use Phloem\Phloem;
 use PHPUnit\Framework\TestCase;
@@ -16,6 +17,7 @@ use Xylemical\Expressions\ExpressionFactory;
 use Xylemical\Expressions\Lexer;
 use Xylemical\Expressions\Math\BcMath;
 use Xylemical\Expressions\Parser;
+use Phloem\Filter\Factory as FilterFactory;
 
 class FactoryTest extends TestCase
 {
@@ -36,11 +38,14 @@ class FactoryTest extends TestCase
     public function setUp()
     {
         $this->container = new \Pimple\Container();
-        $this->factory = new Factory(new Container($this->container));
+        $container = new Container($this->container);
+        $this->factory = new Factory($container);
         $this->container[Phloem::ACTIONS] = $this->factory;
         $this->container[Phloem::PARSER] = new Parser(new Lexer(new ExpressionFactory(new BcMath())));
         $this->container[Phloem::MANAGER] = new Manager();
         $this->container[Phloem::EVALUATOR] = new Evaluator();
+        $this->container[Phloem::LOGGER] = new NullLogger();
+        $this->container[Phloem::FILTERS] = new FilterFactory($container);
     }
 
     /**

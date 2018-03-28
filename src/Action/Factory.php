@@ -33,6 +33,7 @@ class Factory
      */
     protected $actions = [
       'command' => 'Phloem\\Actions\\Command\\CommandAction',
+      'echo' => 'Phloem\\Actions\\Output\\EchoAction',
       'if' => 'Phloem\\Actions\\Structural\\IfAction',
       'include' => 'Phloem\\Actions\\File\\IncludeAction',
       'loop' => 'Phloem\\Actions\\Structural\\LoopAction',

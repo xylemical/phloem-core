@@ -6,6 +6,7 @@
 
 namespace Phloem\Actions\Structural;
 
+use Phloem\Action\AbstractAction;
 use Phloem\Action\ActionInterface;
 use Phloem\Actions\Structural\TaskAction;
 use Phloem\Exception\ConfigException;
@@ -17,7 +18,7 @@ use Psr\Container\ContainerInterface;
  *
  * @package Phloem\Actions
  */
-class RunAction implements ActionInterface
+class RunAction extends AbstractAction
 {
     /**
      * @var \Phloem\Actions\Structural\TaskAction
@@ -44,6 +45,8 @@ class RunAction implements ActionInterface
      */
     public function setup(ContainerInterface $container, array $config)
     {
+        parent::setup($container, $config);
+
         $name = $this->task->getName();
         if (array_key_exists($name, $config)) {
             $this->config = (array)$config[$name];
@@ -62,10 +65,19 @@ class RunAction implements ActionInterface
             $context->setVariable($name, $value);
         }
 
-        // Run the task itself.
-        $this->task->execute($context);
+        // Ensure the dependencies are run.
+        foreach ($this->task->getDependencies() as $dependency) {
+            $action = $this->getFactory()->getAction($dependency);
+            $this->perform($action, $context, 'dependency (' . $dependency . ')');
+        }
+
+        // Execute the action.
+        $action = $this->task->getAction();
+        if ($action) {
+            $this->perform($action, $context, $this->task->getName());
+        }
 
         // Pop the variable context.
-        $context->pop('task');
+        $context->pop();
     }
 }

@@ -7,6 +7,7 @@
 namespace Phloem\Action;
 
 use Phloem\Expression\Variable;
+use Phloem\Log\NullLogger;
 use Phloem\Manager;
 use Phloem\Phloem;
 use PHPUnit\Framework\TestCase;
@@ -55,6 +56,7 @@ abstract class ActionTestCase extends TestCase
         $this->pimple[Phloem::EVALUATOR] = new Evaluator();
         $this->pimple[Phloem::FILTERS] = new FilterFactory($this->container);
         $this->pimple[Phloem::LOADER] = new LoaderFactory();
+        $this->pimple[Phloem::LOGGER] = new NullLogger();
 
         // Provide variable behaviour with the filtering.
         $this->pimple[Phloem::EXPRESSIONS]->addOperator(new Variable());

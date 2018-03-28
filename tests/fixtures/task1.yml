@@ -1,2 +1,7 @@
 - set:
     task1: task1
+
+- task: dummy-task
+  actions:
+    - set:
+        dummy-task: dummy-task

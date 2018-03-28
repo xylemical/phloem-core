@@ -9,12 +9,14 @@ namespace Phloem;
 use Phloem\Actions\NullAction;
 use Phloem\Expression\Variable;
 use Phloem\Exception\ExecutionException;
+use Phloem\Log\NullLogger;
 use Pimple\Container;
 use Phloem\Event\EventManager;
 use Phloem\Expression\Context;
 use Phloem\Action\Factory as ActionFactory;
 use Phloem\Filter\Factory as FilterFactory;
 use Phloem\Loader\Factory as LoaderFactory;
+use Psr\Log\LoggerInterface;
 use Xylemical\Expressions\Evaluator;
 use Xylemical\Expressions\ExpressionFactory;
 use Xylemical\Expressions\Lexer;
@@ -71,6 +73,11 @@ class Phloem
     const MANAGER = 'phloem:manager';
 
     /**
+     * Service identifier for managing the logging behaviour.
+     */
+    const LOGGER = 'phloem:logger';
+
+    /**
      * @var \Pimple\Container
      */
     protected $container;
@@ -98,6 +105,7 @@ class Phloem
         $container[self::LOADER] = new LoaderFactory();
         $container[self::MANAGER] = new Manager();
         $container[self::PARSER] = new Parser(new Lexer($container[Phloem::EXPRESSIONS]));
+        $container[self::LOGGER] = new NullLogger();
 
         /** @var \Xylemical\Expressions\ExpressionFactory $expressions */
         $expressions = $container[self::EXPRESSIONS];
@@ -127,6 +135,46 @@ class Phloem
     }
 
     /**
+     * Get the manager.
+     *
+     * @return \Phloem\Manager
+     */
+    public function getManager() {
+        return $this->container[self::MANAGER];
+    }
+
+    /**
+     * Get the logger used for the system.
+     *
+     * @return \Psr\Log\LoggerInterface
+     */
+    public function getLogger() {
+        return $this->container[self::LOGGER];
+    }
+
+    /**
+     * Set the logger.
+     *
+     * @param \Psr\Log\LoggerInterface $logger
+     *
+     * @return static
+     */
+    public function setLogger(LoggerInterface $logger) {
+        $this->container[self::LOGGER] = $logger;
+        return $this;
+    }
+
+    /**
+     * Get the action factory.
+     *
+     * @return \Phloem\Action\Factory
+     */
+    public function getActionFactory()
+    {
+        return $this->container[self::ACTIONS];
+    }
+
+    /**
      * Loads the actions defined by a file.
      *
      * @param string $file
@@ -148,13 +196,13 @@ class Phloem
 
         // Load the filename via the factory.
         $loader = $factory->getLoader($file);
-        $contents = $loader->load($file, dirname($file));
+        $contents = $loader->load(basename($file), dirname($file));
 
         // Remove the filename from the manager.
         $manager->pop();
 
         // Return the contents of the loaded file.
-        return !empty($contents[$file]) ? $contents[$file] : [];
+        return !empty($contents) ? reset($contents) : [];
     }
 
     /**
